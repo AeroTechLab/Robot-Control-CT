@@ -1,3 +1,6 @@
 [submodule "interface"]
 	path = interface
 	url = https://github.com/EESC-MKGroup/Robot-Control-Interface
+[submodule "ct"]
+	path = ct
+	url = https://github.com/ethz-adrl/control-toolbox
