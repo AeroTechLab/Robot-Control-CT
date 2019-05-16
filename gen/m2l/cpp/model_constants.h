@@ -24,7 +24,7 @@ namespace M2L {
 // Do not use 'constexpr' to allow for non-literal scalar types
 
 const Scalar tx_jB = 1.0;
-const Scalar tx_ee = 1.0;
+const Scalar tx_end_effector = 1.0;
 const Scalar m_base0 = 1.0;
 const Scalar m_link1 = 1.0;
 const Scalar comx_link1 = 0.5;
