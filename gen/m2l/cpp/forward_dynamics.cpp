@@ -42,19 +42,19 @@ void iit::M2L::dyn::ForwardDynamics::fd(
     
     // + Link link1
     //  - The spatial velocity:
-    link1_v(AZ) = qd(JA);
+    link1_v(AZ) = qd(JOINT0);
     
     //  - The bias force term:
-    link1_p += vxIv(qd(JA), link1_AI);
+    link1_p += vxIv(qd(JOINT0), link1_AI);
     
     // + Link link2
     //  - The spatial velocity:
     link2_v = (motionTransforms-> fr_link2_X_fr_link1) * link1_v;
-    link2_v(AZ) += qd(JB);
+    link2_v(AZ) += qd(JOINT1);
     
     //  - The velocity-product acceleration term:
     motionCrossProductMx<Scalar>(link2_v, vcross);
-    link2_c = vcross.col(AZ) * qd(JB);
+    link2_c = vcross.col(AZ) * qd(JOINT1);
     
     //  - The bias force term:
     link2_p += vxIv(link2_v, link2_AI);
@@ -65,7 +65,7 @@ void iit::M2L::dyn::ForwardDynamics::fd(
     Force pa;
     
     // + Link link2
-    link2_u = tau(JB) - link2_p(AZ);
+    link2_u = tau(JOINT1) - link2_p(AZ);
     link2_U = link2_AI.col(AZ);
     link2_D = link2_U(AZ);
     
@@ -76,7 +76,7 @@ void iit::M2L::dyn::ForwardDynamics::fd(
     link1_p += (motionTransforms-> fr_link2_X_fr_link1).transpose() * pa;
     
     // + Link link1
-    link1_u = tau(JA) - link1_p(AZ);
+    link1_u = tau(JOINT0) - link1_p(AZ);
     link1_U = link1_AI.col(AZ);
     link1_D = link1_U(AZ);
     
@@ -84,12 +84,12 @@ void iit::M2L::dyn::ForwardDynamics::fd(
     
     // ---------------------- THIRD PASS ---------------------- //
     link1_a = (motionTransforms-> fr_link1_X_fr_base0).col(LZ) * (M2L::g);
-    qdd(JA) = (link1_u - link1_U.dot(link1_a)) / link1_D;
-    link1_a(AZ) += qdd(JA);
+    qdd(JOINT0) = (link1_u - link1_U.dot(link1_a)) / link1_D;
+    link1_a(AZ) += qdd(JOINT0);
     
     link2_a = (motionTransforms-> fr_link2_X_fr_link1) * link1_a + link2_c;
-    qdd(JB) = (link2_u - link2_U.dot(link2_a)) / link2_D;
-    link2_a(AZ) += qdd(JB);
+    qdd(JOINT1) = (link2_u - link2_U.dot(link2_a)) / link2_D;
+    link2_a(AZ) += qdd(JOINT1);
     
     
 }

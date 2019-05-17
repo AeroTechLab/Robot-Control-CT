@@ -32,16 +32,16 @@ const iit::M2L::dyn::JSIM& iit::M2L::dyn::JSIM::update(const JointState& state) 
     link1_Ic += Ic_spare;
 
     F = link2_Ic.col(AZ);
-    DATA(JB, JB) = F(AZ);
+    DATA(JOINT1, JOINT1) = F(AZ);
 
     F = frcTransf -> fr_link1_X_fr_link2 * F;
-    DATA(JB, JA) = F(AZ);
-    DATA(JA, JB) = DATA(JB, JA);
+    DATA(JOINT1, JOINT0) = F(AZ);
+    DATA(JOINT0, JOINT1) = DATA(JOINT1, JOINT0);
 
     // Link link1:
 
     F = link1_Ic.col(AZ);
-    DATA(JA, JA) = F(AZ);
+    DATA(JOINT0, JOINT0) = F(AZ);
 
 
     return *this;
@@ -52,12 +52,12 @@ const iit::M2L::dyn::JSIM& iit::M2L::dyn::JSIM::update(const JointState& state) 
 
 void iit::M2L::dyn::JSIM::computeL() {
     L = this -> triangularView<Eigen::Lower>();
-    // Joint jB, index 1 :
+    // Joint joint1, index 1 :
     L(1, 1) = ScalarTraits::sqrt(L(1, 1));
     L(1, 0) = L(1, 0) / L(1, 1);
     L(0, 0) = L(0, 0) - L(1, 0) * L(1, 0);
     
-    // Joint jA, index 0 :
+    // Joint joint0, index 0 :
     L(0, 0) = ScalarTraits::sqrt(L(0, 0));
     
 }

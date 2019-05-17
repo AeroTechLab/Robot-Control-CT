@@ -53,17 +53,17 @@ void iit::M2L::dyn::InverseDynamics::G_terms(JointState& jForces)
 void iit::M2L::dyn::InverseDynamics::C_terms(JointState& jForces, const JointState& qd)
 {
     // Link 'link1'
-    link1_v(iit::rbd::AZ) = qd(JA);   // link1_v = vJ, for the first link of a fixed base robot
+    link1_v(iit::rbd::AZ) = qd(JOINT0);   // link1_v = vJ, for the first link of a fixed base robot
     
-    link1_f = vxIv(qd(JA), link1_I);
+    link1_f = vxIv(qd(JOINT0), link1_I);
     
     // Link 'link2'
     link2_v = ((xm->fr_link2_X_fr_link1) * link1_v);
-    link2_v(iit::rbd::AZ) += qd(JB);
+    link2_v(iit::rbd::AZ) += qd(JOINT1);
     
     motionCrossProductMx<Scalar>(link2_v, vcross);
     
-    link2_a = (vcross.col(iit::rbd::AZ) * qd(JB));
+    link2_a = (vcross.col(iit::rbd::AZ) * qd(JOINT1));
     
     link2_f = link2_I * link2_a + vxIv(link2_v, link2_I);
     
@@ -76,19 +76,19 @@ void iit::M2L::dyn::InverseDynamics::firstPass(const JointState& qd, const Joint
 {
     // First pass, link 'link1'
     link1_a = (xm->fr_link1_X_fr_base0).col(iit::rbd::LZ) * M2L::g;
-    link1_a(iit::rbd::AZ) += qdd(JA);
-    link1_v(iit::rbd::AZ) = qd(JA);   // link1_v = vJ, for the first link of a fixed base robot
+    link1_a(iit::rbd::AZ) += qdd(JOINT0);
+    link1_v(iit::rbd::AZ) = qd(JOINT0);   // link1_v = vJ, for the first link of a fixed base robot
     
-    link1_f = link1_I * link1_a + vxIv(qd(JA), link1_I)  - fext[LINK1];
+    link1_f = link1_I * link1_a + vxIv(qd(JOINT0), link1_I)  - fext[LINK1];
     
     // First pass, link 'link2'
     link2_v = ((xm->fr_link2_X_fr_link1) * link1_v);
-    link2_v(iit::rbd::AZ) += qd(JB);
+    link2_v(iit::rbd::AZ) += qd(JOINT1);
     
     motionCrossProductMx<Scalar>(link2_v, vcross);
     
-    link2_a = (xm->fr_link2_X_fr_link1) * link1_a + vcross.col(iit::rbd::AZ) * qd(JB);
-    link2_a(iit::rbd::AZ) += qdd(JB);
+    link2_a = (xm->fr_link2_X_fr_link1) * link1_a + vcross.col(iit::rbd::AZ) * qd(JOINT1);
+    link2_a(iit::rbd::AZ) += qdd(JOINT1);
     
     link2_f = link2_I * link2_a + vxIv(link2_v, link2_I) - fext[LINK2];
     
@@ -97,8 +97,8 @@ void iit::M2L::dyn::InverseDynamics::firstPass(const JointState& qd, const Joint
 void iit::M2L::dyn::InverseDynamics::secondPass(JointState& jForces)
 {
     // Link 'link2'
-    jForces(JB) = link2_f(iit::rbd::AZ);
+    jForces(JOINT1) = link2_f(iit::rbd::AZ);
     link1_f += xm->fr_link2_X_fr_link1.transpose() * link2_f;
     // Link 'link1'
-    jForces(JA) = link1_f(iit::rbd::AZ);
+    jForces(JOINT0) = link1_f(iit::rbd::AZ);
 }

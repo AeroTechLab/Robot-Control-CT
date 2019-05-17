@@ -15,8 +15,8 @@ typedef Matrix<2, 1> Column2d;
 typedef Column2d JointState;
 
 enum JointIdentifiers {
-    JA = 0
-    , JB
+    JOINT0 = 0
+    , JOINT1
 };
 
 enum LinkIdentifiers {
@@ -26,7 +26,7 @@ enum LinkIdentifiers {
 };
 
 static const JointIdentifiers orderedJointIDs[jointsCount] =
-    {JA,JB};
+    {JOINT0,JOINT1};
 
 static const LinkIdentifiers orderedLinkIDs[linksCount] =
     {BASE0,LINK1,LINK2};

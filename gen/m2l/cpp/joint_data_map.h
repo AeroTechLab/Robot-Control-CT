@@ -64,23 +64,23 @@ const T& JointDataMap<T>::operator[](JointIdentifiers j) const {
 
 template<typename T> inline
 void JointDataMap<T>::copydata(const JointDataMap& rhs) {
-    data[JA] = rhs[JA];
-    data[JB] = rhs[JB];
+    data[JOINT0] = rhs[JOINT0];
+    data[JOINT1] = rhs[JOINT1];
 }
 
 template<typename T> inline
 void JointDataMap<T>::assigndata(const T& value) {
-    data[JA] = value;
-    data[JB] = value;
+    data[JOINT0] = value;
+    data[JOINT1] = value;
 }
 
 template<typename T> inline
 std::ostream& operator<<(std::ostream& out, const JointDataMap<T>& map) {
     out
-    << "   jA = "
-    << map[JA]
-    << "   jB = "
-    << map[JB]
+    << "   joint0 = "
+    << map[JOINT0]
+    << "   joint1 = "
+    << map[JOINT1]
     ;
     return out;
 }
